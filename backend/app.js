@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
@@ -12,6 +13,15 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
+
+// Serve video files from /Videos folder
+app.use("/videos", express.static(path.join(__dirname, "Videos")));
+
+// Serve PDF files from /pdfs folder
+app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
+
+
 app.use(cors());
 
 app.use("/api/courses", courseRoutes);
@@ -38,3 +48,6 @@ mongoose.connect(MONGO_URI)
   .catch((err) => {
     console.error("❌ MongoDB connection failed:", err.message);
   });
+  
+  
+

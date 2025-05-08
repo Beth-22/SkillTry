@@ -1,27 +1,22 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const { authenticateUser, authorizeRoles } = require("../middlewares/authMiddleware");
-const { uploadVideo } = require("../controllers/videoController");
 const { streamVideo } = require("../controllers/videoController");
+
+const upload = require("../middlewares/videoUpload"); // Import the multer configuration
+const { authenticateUser, authorizeRoles } = require("../middlewares/authMiddleware");
+const { uploadVideo } = require("../controllers/videoController"); // Controller method for uploading videos
 
 const router = express.Router();
 
-// Multer config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "videos/"),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
+// Route to stream video
+router.get("/stream", streamVideo); // Use the `path` query parameter to get the video file
 
-// Route
+// Video upload route
 router.post(
-  "/upload",
-  authenticateUser,
-  authorizeRoles("instructor", "admin"),
-  upload.single("video"),
-  uploadVideo
+  "/upload/:courseId",
+  authenticateUser, // Ensure the user is logged in
+  authorizeRoles("instructor", "admin"), // Only instructor or admin can upload videos
+  upload.single("video"), // Multer middleware to handle video upload
+  uploadVideo // Controller function to handle after upload (save the video link to the course)
 );
-router.get("/stream/:id", authenticateUser, streamVideo);
 
 module.exports = router;
