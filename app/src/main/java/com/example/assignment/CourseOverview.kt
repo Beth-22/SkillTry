@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.sp
 import com.example.assignment.ui.theme.Primary
 
 
+
+
 @Preview
 @Composable
 fun CourseOverview_preview() {
@@ -66,7 +68,7 @@ fun CourseOverview(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier
             .padding(it)) {
-            LessonsUploaded()
+            LessonsUploaded("Figma Master Class for Beginners")
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.assignment
 
 
+
+
 import android.graphics.drawable.Icon
 import android.media.Image
 import android.media.browse.MediaBrowser
@@ -68,40 +70,33 @@ import com.example.assignment.ui.theme.Primary
 
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-fun LessonsUploaded_Preview() {
-    LessonsUploaded("Figma Master Class for Beginners")
+fun CourseDetail_Preview() {
+    CourseDetail("Figma Master Class for Beginners", "28")
 }
 
 
 @Composable
-fun LessonsUploaded(title: String, modifier: Modifier = Modifier) {
+fun CourseDetail(title: String, lessonNumber: String, modifier: Modifier = Modifier) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         VideoUploaded()
         Text(title,
-            modifier = Modifier.padding(start = 24.dp,bottom = 16.dp),
+            modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold)
-        Lessons()
+
+        UserLessons()
     }
 }
-@Composable
-fun VideoUploaded(modifier: Modifier = Modifier) {
-    Image(painter = painterResource(R.drawable.figma),
-        contentDescription = "Figma",
-        modifier = Modifier
-            .padding(24.dp)
-            .clip(shape = RoundedCornerShape(16.dp)))
-}
+
 
 @Composable
-fun Lessons(modifier: Modifier = Modifier) {
+fun UserLessons(modifier: Modifier = Modifier) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
-
 
         LessonComponent("Videos", R.drawable.video_icon) { VideoHolder() }
         LessonComponent("Notes", R.drawable.notes) { VideoHolder() }
         LessonComponent("Assignments", R.drawable.assignment) { VideoHolder() }
-
+        GetCertificate("Get your Certificate", R.drawable.humbleicons_certificate) { }
 
 
 
@@ -109,73 +104,37 @@ fun Lessons(modifier: Modifier = Modifier) {
 }
 
 
-@Composable
-fun Videos (modifier: Modifier = Modifier) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(painter = painterResource(R.drawable.video_icon),
-            contentDescription = "video icon",
-            modifier = Modifier
-                .size(32.dp)
-                .padding(end = 8.dp))
-        Text("1.1 Part 1.mp4",
-            style = MaterialTheme.typography.titleMedium,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold)
-    }
 
-    HorizontalDivider(modifier = Modifier.padding(8.dp), 0.5.dp, Color(0xFF9A4DFF))
-}
+//Get your Certificate Button
 
 @Composable
-fun VideoHolder(modifier: Modifier = Modifier) {
-    Column() {
-        Videos()
-        Videos()
-        Videos()
-        Videos()
-
-    }
-}
-
-@Composable
-fun LessonComponent(
+fun GetCertificate(
     text: String,
     icon: Int,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    onClick: () -> Unit
 ) {
 
-    var isExpanded by remember { mutableStateOf(false) }
-
     Column(modifier = Modifier
-        .padding(horizontal = 24.dp, vertical = 16.dp)
-        .then(
-            if (isExpanded) Modifier
-                .border(1.dp, Color(0xFF9A4DFF), RoundedCornerShape(8.dp))
-            else Modifier
-        )
+        .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-//                .padding(horizontal = 24.dp, vertical = 8.dp)
                 .fillMaxWidth()
                 .border(
-                    if (!isExpanded) 1.dp else 0.5.dp,
-                    color = if (!isExpanded) Color.Black else Color(0xFF9A4DFF),
-                    shape = if (!isExpanded) RoundedCornerShape(8.dp) else RoundedCornerShape(
-                        topStart = 8.dp,
-                        topEnd = 8.dp
-                    )
+                    width = 1.dp ,
+                    color = Color.Black ,
+                    shape = RoundedCornerShape(8.dp)
                 )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ) { isExpanded = !isExpanded }) {
+                ) { }) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(painter = painterResource(icon),
-                    contentDescription = "icon",
+                    contentDescription = "video icon",
                     modifier = Modifier
                         .size(32.dp)
                         .padding(end = 8.dp))
@@ -184,27 +143,12 @@ fun LessonComponent(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold)
             }
-            Image(if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = if (isExpanded) "Collapse" else "Expand")
         }
 
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically()
-        ) {
-            Box(modifier = Modifier.padding(start = 24.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)) {
-                content()
-            }
-        }
+
 
     }
 }
-
-
-
-
-
 
 
 
