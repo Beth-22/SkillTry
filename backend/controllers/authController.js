@@ -15,15 +15,15 @@ const generateRefreshToken = (user) => {
   });
 };
 
-// Register
+// ✅ SIGNUP (no role)
 const signupUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body; // removed role
 
   try {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User already exists" });
 
-    const user = new User({ name, email, password, role });
+    const user = new User({ name, email, password }); // no role set
     await user.save();
 
     const accessToken = generateAccessToken(user);
@@ -32,7 +32,7 @@ const signupUser = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "strict",
-      secure: false, // true in production
+      secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -48,7 +48,29 @@ const signupUser = async (req, res) => {
   }
 };
 
-// Login
+// ✅ SELECT ROLE after signup
+const selectUserRole = async (req, res) => {
+  const { role } = req.body;
+  const userId = req.user.id;
+
+  if (!["student", "instructor"].includes(role)) {
+    return res.status(400).json({ message: "Invalid role selected" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({ message: "Role assigned", role });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// LOGIN (unchanged)
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -80,7 +102,17 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Refresh Token
+// LOGOUT (unchanged)
+const logoutUser = (req, res) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: false,
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};
+
+// REFRESH TOKEN (unchanged)
 const refreshToken = async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ message: "No refresh token provided" });
@@ -97,19 +129,10 @@ const refreshToken = async (req, res) => {
   }
 };
 
-// Logout
-const logoutUser = (req, res) => {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: false,
-  });
-  res.status(200).json({ message: "Logged out successfully" });
-};
-
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
   refreshToken,
+  selectUserRole, // ✅ export new controller
 };
