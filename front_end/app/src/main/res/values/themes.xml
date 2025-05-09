@@ -1,0 +1,28 @@
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.SkillBoost" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/purple_700</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/black</item>
+
+        <!-- Window settings -->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+
+        <item name="android:textColorPrimary">@android:color/black</item>
+    </style>
+
+    <!-- Custom style for RecyclerView items -->
+    <style name="RecyclerViewItemStyle">
+        <item name="android:background">@drawable/course_background</item>
+        <item name="android:padding">16dp</item>
+    </style>
+</resources>
