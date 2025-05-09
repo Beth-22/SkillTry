@@ -183,6 +183,51 @@ const getEnrolledCourses = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const searchCourses = async (req, res) => {
+  try {
+    const { title } = req.query;
+
+    const query = {};
+    if (title) {
+      query.title = { $regex: title, $options: "i" }; // case-insensitive search
+    }
+
+    const courses = await Course.find(query);
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// In your courseController.js
+const uploadCourseImage = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Ensure the logged-in user is the instructor or admin
+    if (course.instructor.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    // Save the image URL in the course model
+    course.image = `/images/${req.file.filename}`;
+    await course.save();
+
+    res.status(200).json({
+      message: "Course image uploaded successfully",
+      image: course.image,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 
 module.exports = {
   createCourse,
@@ -195,5 +240,7 @@ module.exports = {
   updateVideoInCourse,
   deleteVideoFromCourse,
   uploadPdfToCourse,
+  searchCourses,
+  uploadCourseImage,
 };
 // Note: The above code assumes that the Course model has been defined with the necessary fields and relationships.

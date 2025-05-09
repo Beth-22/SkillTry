@@ -6,6 +6,10 @@ const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const videoRoutes = require("./routes/videoRoutes");
+const courseProgressRoutes = require("./routes/courseProgressRoutes");
+
+
+
 
 
 dotenv.config();
@@ -20,11 +24,14 @@ app.use("/videos", express.static(path.join(__dirname, "Videos")));
 
 // Serve PDF files from /pdfs folder
 app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
+app.use("/Images", express.static("Images"));
+
 
 
 app.use(cors());
 
 app.use("/api/courses", courseRoutes);
+app.use("/api/course-progress", courseProgressRoutes);
 app.use("/api/videos", videoRoutes);
 
 

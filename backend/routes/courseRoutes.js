@@ -1,6 +1,7 @@
 const express = require("express");
 const uploadPdf = require("../middlewares/uploadPdfMiddleware");
-
+const upload = require("../middlewares/uploadImage");
+const { uploadCourseImage } = require("../controllers/courseController");
 const { authenticateUser, authorizeRoles } = require("../middlewares/authMiddleware");
 const {
   createCourse,
@@ -17,8 +18,21 @@ const {
   
 } = require("../controllers/courseController");
 const { uploadPdfToCourse } = require("../controllers/courseController");
+const { searchCourses } = require("../controllers/courseController");
 
 const router = express.Router();
+router.get("/search", searchCourses);
+// In your courseRoutes.js
+router.post(
+  "/:courseId/upload-image", // Include courseId in the URL
+  authenticateUser,
+  authorizeRoles("instructor", "admin"),
+  upload.single("image"),
+  uploadCourseImage
+);
+
+
+
 router.post(
   "/:id/upload/pdf",
   authenticateUser,
@@ -36,5 +50,5 @@ router.post("/:id/enroll", authenticateUser, enrollInCourse);  // enroll
 router.get("/student/enrolled", authenticateUser, getEnrolledCourses);  // student enrolled list
 router.put("/:courseId/videos/:videoId", authenticateUser, updateVideoInCourse);
 router.delete("/:courseId/videos/:videoId", authenticateUser, deleteVideoFromCourse);
+
 module.exports = router;
-// This code defines the routes for course-related operations in an Express application. It includes routes for creating, retrieving, updating, deleting courses, enrolling students, and getting enrolled courses. The routes are protected by authentication and authorization middleware to ensure that only authorized users can access them.
