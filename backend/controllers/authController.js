@@ -70,7 +70,7 @@ const selectUserRole = async (req, res) => {
   }
 };
 
-// LOGIN (unchanged)
+// LOGIN 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -102,7 +102,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-// LOGOUT (unchanged)
+// LOGOUT 
 const logoutUser = (req, res) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
@@ -112,7 +112,7 @@ const logoutUser = (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-// REFRESH TOKEN (unchanged)
+// REFRESH TOKEN 
 const refreshToken = async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ message: "No refresh token provided" });
