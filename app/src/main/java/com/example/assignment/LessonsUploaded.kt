@@ -76,7 +76,7 @@ fun CoursesUploaded_Preview() {
 @Composable
 fun CoursesUploaded(title: String, modifier: Modifier = Modifier) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        VideoUploaded()
+        ImageUploaded(R.drawable.figma)
         Text(title,
             modifier = Modifier.padding(start = 24.dp,bottom = 16.dp),
             style = MaterialTheme.typography.titleLarge,
@@ -87,8 +87,8 @@ fun CoursesUploaded(title: String, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun VideoUploaded(modifier: Modifier = Modifier) {
-    Image(painter = painterResource(R.drawable.figma),
+fun ImageUploaded(image: Int, modifier: Modifier = Modifier) {
+    Image(painter = painterResource(image),
         contentDescription = "Figma",
         modifier = Modifier
             .padding(24.dp)
