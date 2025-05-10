@@ -68,22 +68,24 @@ import com.example.assignment.ui.theme.Primary
 
 @Preview(showBackground = true, widthDp = 400)
 @Composable
-fun LessonsUploaded_Preview() {
-    LessonsUploaded("Figma Master Class for Beginners")
+fun CoursesUploaded_Preview() {
+    CoursesUploaded("Figma Master Class for Beginners")
 }
 
 
 @Composable
-fun LessonsUploaded(title: String, modifier: Modifier = Modifier) {
+fun CoursesUploaded(title: String, modifier: Modifier = Modifier) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         VideoUploaded()
         Text(title,
             modifier = Modifier.padding(start = 24.dp,bottom = 16.dp),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold)
-        Lessons()
+        CoursePartHolder()
     }
 }
+
+
 @Composable
 fun VideoUploaded(modifier: Modifier = Modifier) {
     Image(painter = painterResource(R.drawable.figma),
@@ -94,30 +96,24 @@ fun VideoUploaded(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Lessons(modifier: Modifier = Modifier) {
+fun CoursePartHolder(modifier: Modifier = Modifier) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
-
-
-        LessonComponent("Videos", R.drawable.video_icon) { VideoHolder() }
-        LessonComponent("Notes", R.drawable.notes) { VideoHolder() }
-        LessonComponent("Assignments", R.drawable.assignment) { VideoHolder() }
-
-
-
-
+        CourseComponent("Videos", R.drawable.video_icon) { VideoHolder() }
+        CourseComponent("Notes", R.drawable.notes) { VideoHolder() }
+        CourseComponent("Assignments", R.drawable.assignment) { VideoHolder() }
     }
 }
 
 
 @Composable
-fun Videos (modifier: Modifier = Modifier) {
+fun CourseSubcomponent(text: String, icon: Int, modifier: Modifier = Modifier) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(painter = painterResource(R.drawable.video_icon),
-            contentDescription = "video icon",
+        Image(painter = painterResource(icon),
+            contentDescription = "icon",
             modifier = Modifier
                 .size(32.dp)
                 .padding(end = 8.dp))
-        Text("1.1 Part 1.mp4",
+        Text(text,
             style = MaterialTheme.typography.titleMedium,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold)
@@ -129,16 +125,37 @@ fun Videos (modifier: Modifier = Modifier) {
 @Composable
 fun VideoHolder(modifier: Modifier = Modifier) {
     Column() {
-        Videos()
-        Videos()
-        Videos()
-        Videos()
-
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.video_icon)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.video_icon)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.video_icon)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.video_icon)
     }
 }
 
 @Composable
-fun LessonComponent(
+fun NoteHolder(modifier: Modifier = Modifier) {
+    Column() {
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.notes)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.notes)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.notes)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.notes)
+    }
+}
+
+@Composable
+fun AssignmentHolder(modifier: Modifier = Modifier) {
+    Column() {
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.assignment)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.assignment)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.assignment)
+        CourseSubcomponent("1.1 Part 1.mp4", R.drawable.assignment)
+    }
+}
+
+
+
+@Composable
+fun CourseComponent(
     text: String,
     icon: Int,
     modifier: Modifier = Modifier,
@@ -158,7 +175,6 @@ fun LessonComponent(
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-//                .padding(horizontal = 24.dp, vertical = 8.dp)
                 .fillMaxWidth()
                 .border(
                     if (!isExpanded) 1.dp else 0.5.dp,
